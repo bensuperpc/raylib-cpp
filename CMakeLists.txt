@@ -1,34 +1,60 @@
-cmake_minimum_required(VERSION 3.11)
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-project (raylib_cpp
+cmake_minimum_required(VERSION 3.14)
+
+include(cmake/prelude.cmake)
+
+project(
+    raylib-cpp
     VERSION 4.2.1
-    DESCRIPTION "raylib-cpp C++ Object Oriented Wrapper for raylib"
-    HOMEPAGE_URL "https://github.com/robloach/raylib-cpp"
-    LANGUAGES C CXX)
+    DESCRIPTION "C++ Object Oriented Wrapper for raylib"
+    HOMEPAGE_URL "https://github.com/RobLoach/raylib-cpp"
+    LANGUAGES NONE
+)
 
-# Options
-if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-    set(RAYLIB_CPP_IS_MAIN TRUE)
-else()
-    set(RAYLIB_CPP_IS_MAIN FALSE)
+include(cmake/project-is-top-level.cmake)
+include(cmake/variables.cmake)
+
+# ---- Declare library ----
+
+add_library(raylib-cpp_raylib-cpp INTERFACE)
+add_library(raylib-cpp::raylib-cpp ALIAS raylib-cpp_raylib-cpp)
+
+set_property(
+    TARGET raylib-cpp_raylib-cpp PROPERTY
+    EXPORT_NAME raylib-cpp
+)
+
+target_include_directories(
+    raylib-cpp_raylib-cpp ${warning_guard}
+    INTERFACE
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+)
+
+target_compile_features(raylib-cpp_raylib-cpp INTERFACE cxx_std_17)
+
+# ---- Install rules ----
+
+if(NOT CMAKE_SKIP_INSTALL_RULES)
+  include(cmake/install-rules.cmake)
 endif()
-option(BUILD_RAYLIB_CPP_EXAMPLES "Examples" ${RAYLIB_CPP_IS_MAIN})
 
-# Include Directory
-add_subdirectory(include)
+# ---- Examples ----
 
-# Examples
-if(BUILD_RAYLIB_CPP_EXAMPLES)
-    add_subdirectory(examples)
-    set(BUILD_RAYLIB_CPP_STATIC ON)
-
-    # Testing
-    include(CTest)
-    enable_testing()
-    if(BUILD_TESTING)
-        set(CTEST_CUSTOM_TESTS_IGNORE
-            pkg-config--static
-        )
-        add_subdirectory(tests)
-    endif()
+if(PROJECT_IS_TOP_LEVEL)
+  option(BUILD_EXAMPLES "Build examples tree." "${raylib-cpp_DEVELOPER_MODE}")
+  if(BUILD_EXAMPLES)
+    add_subdirectory(example)
+  endif()
 endif()
+
+# ---- Developer mode ----
+
+if(NOT raylib-cpp_DEVELOPER_MODE)
+  return()
+elseif(NOT PROJECT_IS_TOP_LEVEL)
+  message(
+      AUTHOR_WARNING
+      "Developer mode is intended for developers of raylib-cpp"
+  )
+endif()
+
+include(cmake/dev-mode.cmake)
