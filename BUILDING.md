@@ -70,16 +70,6 @@ emmake make
 
 See [`core_basic_window_web.html`](examples/core/resources/core_basic_window_web.html) for an example HTML canvas you can you.
 
-
-
-
-
-
-
-
-
-
-
 ## Install
 
 This project doesn't require any special command-line flags to install to keep

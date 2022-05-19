@@ -15,7 +15,7 @@ add_custom_target(run-examples)
 function(add_example NAME)
   add_executable("${NAME}" "${NAME}.cpp")
   target_link_libraries("${NAME}" PRIVATE raylib-cpp::raylib-cpp)
-  target_compile_features("${NAME}" PRIVATE cxx_std_17)
+  target_compile_features("${NAME}" PRIVATE cxx_std_14)
   add_custom_target("run_${NAME}" COMMAND "${NAME}" VERBATIM)
   add_dependencies("run_${NAME}" "${NAME}")
   add_dependencies(run-examples "run_${NAME}")
@@ -30,24 +30,7 @@ set(example_dirs audio core models physics shaders shapes text textures)
 set(example_sources)
 set(example_resources)
 
-# raylib
-find_package(raylib QUIET)
-if (NOT raylib_FOUND)
-    include(FetchContent)
-        FetchContent_Declare(
-        raylib
-        GIT_REPOSITORY https://github.com/raysan5/raylib.git
-        GIT_TAG 4.0.0
-    )
-    FetchContent_GetProperties(raylib)
-    if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
-        set(FETCHCONTENT_QUIET NO)
-        FetchContent_Populate(raylib)
-        set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-        set(BUILD_GAMES    OFF CACHE BOOL "" FORCE)
-        add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
-    endif()
-endif()
+add_custom_target(run-examples)
 
 # Find all examples
 foreach(example_dir ${example_dirs})
@@ -70,6 +53,11 @@ foreach(example_source ${example_sources})
 
     # Link raylib and raylib-cpp
     target_link_libraries(${example_name} PUBLIC raylib-cpp::raylib-cpp raylib)
+
+    # Custom target to run the example
+    add_custom_target("run_${example_name}" COMMAND "${example_name}" VERBATIM)
+    add_dependencies("run_${example_name}" "${example_name}")
+    add_dependencies(run-examples "run_${example_name}")
 
     string(REGEX MATCH ".*/.*/" resources_dir ${example_source})
     string(APPEND resources_dir "resources")

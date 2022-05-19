@@ -17,7 +17,7 @@ endif()
 
 add_executable(raylib-cpp_test raylib_cpp_test.cpp)
 target_link_libraries(raylib-cpp_test PRIVATE raylib-cpp::raylib-cpp raylib)
-target_compile_features(raylib-cpp_test PRIVATE cxx_std_17)
+target_compile_features(raylib-cpp_test PRIVATE cxx_std_14)
 
 add_test(NAME raylib-cpp_test COMMAND raylib-cpp_test)
 

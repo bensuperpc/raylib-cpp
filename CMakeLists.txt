@@ -13,6 +13,28 @@ project(
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 
+# ---- Declare library dependency ----
+
+# raylib
+find_package(raylib QUIET)
+if (NOT raylib_FOUND)
+  include(FetchContent)
+  set(FETCHCONTENT_QUIET FALSE)
+
+  FetchContent_Declare(
+              raylib
+              GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
+              GIT_TAG 4.0.0 # 2022-05-11
+      )
+  set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+  set(BUILD_GAMES    OFF CACHE BOOL "" FORCE)
+  set(INCLUDE_EVERYTHING ON CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(raylib)
+
+  get_target_property(_inc raylib INTERFACE_INCLUDE_DIRECTORIES)
+  target_include_directories(raylib SYSTEM INTERFACE ${_inc})
+endif()
+
 # ---- Declare library ----
 
 add_library(raylib-cpp_raylib-cpp INTERFACE)
