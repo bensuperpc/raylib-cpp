@@ -3,13 +3,11 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - '*'
-    paths-ignore:
-      - '**/README.md'
+    - master
+
   pull_request:
     branches:
-      - '*'
-  workflow_dispatch:
+    - master
 
 jobs:
   lint:
@@ -32,7 +30,7 @@ jobs:
       run: cmake -P cmake/spell.cmake
 
   coverage:
-    #needs: [lint]
+    needs: [lint]
 
     runs-on: ubuntu-latest
 
@@ -49,6 +47,10 @@ jobs:
     - name: Install LCov
       run: sudo apt-get update -q
         && sudo apt-get install lcov -q -y
+
+    - name: Install dependencies 
+      run: sudo apt-get update -q
+        && sudo apt-get install xorg-dev libglu1-mesa-dev -q -y
 
     - name: Configure
       run: cmake --preset=ci-coverage
@@ -76,6 +78,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install dependencies 
+      run: sudo apt-get update -q
+        && sudo apt-get install xorg-dev libglu1-mesa-dev -q -y
+
     - name: Configure
       env: { CXX: clang++-12 }
       run: cmake --preset=ci-sanitize
@@ -98,6 +104,7 @@ jobs:
     #needs: [lint]
 
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-2022]
 
@@ -109,6 +116,11 @@ jobs:
     - name: Install static analyzers
       if: matrix.os == 'ubuntu-latest'
       run: sudo apt-get install clang-tidy cppcheck -y -q
+
+    - name: Install dependencies 
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt-get update -q
+        && sudo apt-get install xorg-dev libglu1-mesa-dev -q -y
 
     - name: Configure
       shell: pwsh
@@ -126,7 +138,7 @@ jobs:
 
   docs:
     # Deploy docs only when builds succeed
-    needs: [sanitize, test]
+    #needs: [sanitize, test]
 
     runs-on: ubuntu-latest
 
@@ -158,6 +170,10 @@ jobs:
     - name: Install Doxygen
       run: sudo apt-get update -q
         && sudo apt-get install doxygen -q -y
+
+    - name: Install dependencies 
+      run: sudo apt-get update -q
+        && sudo apt-get install xorg-dev libglu1-mesa-dev -q -y
 
     - name: Build docs
       run: cmake "-DPROJECT_SOURCE_DIR=$PWD" "-DPROJECT_BINARY_DIR=$PWD/build"
