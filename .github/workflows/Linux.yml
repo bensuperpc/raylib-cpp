@@ -22,7 +22,7 @@ jobs:
         platform:
         # - { name: Windows VS2019, os: windows-2019 }
         # - { name: Windows VS2022, os: windows-2022 }
-        - { name: Linux GCC,      os: ubuntu-22.04, flags: -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_STANDARD=17 }
+        - { name: Linux GCC,      os: ubuntu-22.04, flags: -DCMAKE_C_COMPILER=gcc -BUILD_EXAMPLES -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_STANDARD=17 }
         - { name: Linux Clang,    os: ubuntu-22.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_STANDARD=17 }
         - { name: Linux GCC,      os: ubuntu-20.04, flags: -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_STANDARD=14 }
         - { name: Linux Clang,    os: ubuntu-20.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_STANDARD=14 }
@@ -46,7 +46,7 @@ jobs:
       run: sudo apt-get install xorg-dev libglu1-mesa-dev -y
 
     - name: Configure
-      run: cmake -B build -S . -DBUILD_TESTING=ON -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" ${{ matrix.platform.flags }} ${{ matrix.type.flags }} ${{ matrix.config.flags }}
+      run: cmake -B build -S . -Draylib_cpp_DEVELOPER_MODE=ON -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic" ${{ matrix.platform.flags }} ${{ matrix.type.flags }} ${{ matrix.config.flags }}
 
     - name: Build
       run: cmake --build build

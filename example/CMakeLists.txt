@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(raylib_cppExamples CXX)
+project(raylib_cppExamples C CXX)
 
 include(../cmake/project-is-top-level.cmake)
 include(../cmake/folders.cmake)
