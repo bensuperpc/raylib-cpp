@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.14)
 include(cmake/prelude.cmake)
 
 project(
-    raylib-cpp
+    raylib_cpp
     VERSION 4.2.1
     DESCRIPTION "C++ Object Oriented Wrapper for raylib"
-    HOMEPAGE_URL "https://github.com/RobLoach/raylib-cpp"
+    HOMEPAGE_URL "https://github.com/RobLoach/raylib_cpp"
     LANGUAGES NONE
 )
 
@@ -37,21 +37,21 @@ endif()
 
 # ---- Declare library ----
 
-add_library(raylib-cpp_raylib-cpp INTERFACE)
-add_library(raylib-cpp::raylib-cpp ALIAS raylib-cpp_raylib-cpp)
+add_library(raylib_cpp_raylib_cpp INTERFACE)
+add_library(raylib_cpp::raylib_cpp ALIAS raylib_cpp_raylib_cpp)
 
 set_property(
-    TARGET raylib-cpp_raylib-cpp PROPERTY
-    EXPORT_NAME raylib-cpp
+    TARGET raylib_cpp_raylib_cpp PROPERTY
+    EXPORT_NAME raylib_cpp
 )
 
 target_include_directories(
-    raylib-cpp_raylib-cpp ${warning_guard}
+    raylib_cpp_raylib_cpp ${warning_guard}
     INTERFACE
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
 
-target_compile_features(raylib-cpp_raylib-cpp INTERFACE cxx_std_17)
+target_compile_features(raylib_cpp_raylib_cpp INTERFACE cxx_std_17)
 
 # ---- Install rules ----
 
@@ -62,7 +62,7 @@ endif()
 # ---- Examples ----
 
 if(PROJECT_IS_TOP_LEVEL)
-  option(BUILD_EXAMPLES "Build examples tree." "${raylib-cpp_DEVELOPER_MODE}")
+  option(BUILD_EXAMPLES "Build examples tree." "${raylib_cpp_DEVELOPER_MODE}")
   if(BUILD_EXAMPLES)
     add_subdirectory(example)
   endif()
@@ -70,12 +70,12 @@ endif()
 
 # ---- Developer mode ----
 
-if(NOT raylib-cpp_DEVELOPER_MODE)
+if(NOT raylib_cpp_DEVELOPER_MODE)
   return()
 elseif(NOT PROJECT_IS_TOP_LEVEL)
   message(
       AUTHOR_WARNING
-      "Developer mode is intended for developers of raylib-cpp"
+      "Developer mode is intended for developers of raylib_cpp"
   )
 endif()
 

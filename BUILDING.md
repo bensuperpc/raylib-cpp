@@ -98,18 +98,18 @@ cmake --install build --config Release
 This project exports a CMake package to be used with the [`find_package`][3]
 command of CMake:
 
-* Package name: `raylib-cpp`
-* Target name: `raylib-cpp::raylib-cpp`
+* Package name: `raylib_cpp`
+* Target name: `raylib_cpp::raylib_cpp`
 
 Example usage:
 
 ```cmake
-find_package(raylib-cpp REQUIRED)
+find_package(raylib_cpp REQUIRED)
 # Declare the imported target as a build requirement using PRIVATE, where
 # project_target is a target created in the consuming project
 target_link_libraries(
     project_target PRIVATE
-    raylib-cpp::raylib-cpp
+    raylib_cpp::raylib_cpp
 )
 ```
 
