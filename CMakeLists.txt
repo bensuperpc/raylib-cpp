@@ -51,7 +51,7 @@ target_include_directories(
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
 
-target_compile_features(raylib_cpp_raylib_cpp INTERFACE cxx_std_17)
+# target_compile_features(raylib_cpp_raylib_cpp INTERFACE cxx_std_17)
 
 # ---- Install rules ----
 
