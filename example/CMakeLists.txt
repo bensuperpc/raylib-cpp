@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(raylib-cppExamples CXX)
+project(raylib_cppExamples CXX)
 
 include(../cmake/project-is-top-level.cmake)
 include(../cmake/folders.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
-  find_package(raylib-cpp REQUIRED)
+  find_package(raylib_cpp REQUIRED)
 endif()
 
 #[[
@@ -14,7 +14,7 @@ add_custom_target(run-examples)
 
 function(add_example NAME)
   add_executable("${NAME}" "${NAME}.cpp")
-  target_link_libraries("${NAME}" PRIVATE raylib-cpp::raylib-cpp)
+  target_link_libraries("${NAME}" PRIVATE raylib_cpp::raylib_cpp)
   target_compile_features("${NAME}" PRIVATE cxx_std_14)
   add_custom_target("run_${NAME}" COMMAND "${NAME}" VERBATIM)
   add_dependencies("run_${NAME}" "${NAME}")
@@ -51,8 +51,8 @@ foreach(example_source ${example_sources})
     # Setup the example
     add_executable(${example_name} ${example_source})
 
-    # Link raylib and raylib-cpp
-    target_link_libraries(${example_name} PUBLIC raylib-cpp::raylib-cpp raylib)
+    # Link raylib and raylib_cpp
+    target_link_libraries(${example_name} PUBLIC raylib_cpp::raylib_cpp raylib)
 
     # Custom target to run the example
     add_custom_target("run_${example_name}" COMMAND "${example_name}" VERBATIM)
@@ -65,7 +65,7 @@ endforeach()
 
 # Multiple Files Example
 add_executable("multiple" multiple/main.cpp multiple/Player.cpp)
-target_link_libraries("multiple" PUBLIC raylib-cpp::raylib-cpp raylib)
+target_link_libraries("multiple" PUBLIC raylib_cpp::raylib_cpp raylib)
 
 # Copy all the resources
 file(COPY ${example_resources} DESTINATION "resources/")
